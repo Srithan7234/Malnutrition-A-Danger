@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malnutrition Statistics | NutritionForAll</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --accent-color: #f57c00;
+            --text-light: #ffffff;
+            --text-dark: #263238;
+            --text-muted: #546e7a;
+            --background-light: #f9f9f9;
+            --background-dark: #263238;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --highlight-color: #ffecb3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background-color: var(--accent-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--background-light);
+            padding-bottom: 10px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 350px;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .stat-info {
+            margin-top: 30px;
+        }
+        
+        .stat-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        
+        .stat-info p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+        
+        .key-findings {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .key-findings li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .key-findings li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        .highlight-box {
+            background-color: var(--highlight-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .highlight-box p {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .source {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 30px;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quick-stats {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .quick-stat-item {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .quick-stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .quick-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .quick-stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .tag-danger {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .tag-warning {
+            background-color: #fff8e1;
+            color: #f57f17;
+        }
+        
+        .tag-info {
+            background-color: #e1f5fe;
+            color: #0277bd;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #fafafa;
+        }
+        
+        .comparison-table .trend-up {
+            color: #c62828;
+        }
+        
+        .comparison-table .trend-down {
+            color: #2e7d32;
+        }
+        
+        .map-placeholder {
+            background-color: #f5f5f5;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">♥</div>
+            Nutrition<span>ForAll</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stats.html">Statistics</a></li>
+                <li><a href="Documentary.html">Documentary</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="page-title">
+            <h1>Malnutrition Statistics Dashboard</h1>
+            <p class="subtitle">A comprehensive overview of the global child malnutrition crisis with focus on key regions, trends, and intervention impacts.</p>
+        </div>
+        
+        <div class="quick-stats">
+            <div class="quick-stat-item">
+                <div class="quick-stat-number">149M</div>
+                <div class="quick-stat-label">Children Stunted Globally</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="quick-stat-number">45.4M</div>
+                <div class="quick-stat-label">Children Wasted</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="quick-stat-number">38.9M</div>
+                <div class="quick-stat-label">Children Overweight</div>
+            </div>
+            <div class="quick-stat-item">
+                <div class="quick-stat-number">340M</div>
+                <div class="quick-stat-label">Children with Vitamin Deficiencies</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="stat-card full-width">
+                <h2>Child Malnutrition Categories in India</h2>
+                <div class="chart-container">
+                    <canvas id="malnutritionChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Key Findings</h3>
+                    <ul class="key-findings">
+                        <li><strong>Underweight:</strong> 35.8% of children under 5 are underweight (low weight-for-age), representing approximately 48 million children.</li>
+                        <li><strong>Stunting:</strong> 38.4% of children under 5 have stunted growth (low height-for-age), affecting long-term cognitive and physical development.</li>
+                        <li><strong>Wasting:</strong> 21% of children under 5 are wasting (low weight-for-height), indicating acute malnutrition and high risk of mortality.</li>
+                        <li><strong>Severe Acute Malnutrition:</strong> 7.5% of children suffer from severe acute malnutrition, requiring immediate therapeutic intervention.</li>
+                        <li><strong>Anaemia:</strong> 58.6% of children between 6-59 months suffer from anaemia, impacting brain development and immune function.</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p>India accounts for 31% of the global burden of stunting and 23% of the global burden of wasting among children under 5.</p>
+                    </div>
+                    
+                    <p>These statistics reveal that malnutrition affects a significant portion of India's child population, with long-term consequences for physical development, cognitive abilities, educational outcomes, and overall health.</p>
+                    
+                    <p class="source">Source: National Family Health Survey (NFHS-5), 2019-21</p>
+                    
+                    <a href="#" class="btn btn-primary">Download Full Report</a>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>Global Distribution of Child Malnutrition</h2>
+                <div class="chart-container">
+                    <canvas id="globalPieChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Regional Variations</h3>
+                    <p>Child malnutrition remains a critical issue across developing regions, with the highest prevalence in South Asia and Sub-Saharan Africa.</p>
+                    
+                    <ul class="key-findings">
+                        <li><strong>South Asia:</strong> Accounts for 33% of all malnourished children globally, with high rates in India, Pakistan, and Bangladesh.</li>
+                        <li><strong>Sub-Saharan Africa:</strong> Contains 32% of the global burden, with critical situations in Somalia, South Sudan, and Niger.</li>
+                        <li><strong>East Asia:</strong> Makes up 10% of cases, showing significant improvement over the past decade.</li>
+                        <li><strong>Middle East & North Africa:</strong> Represents 8% of global cases, with conflict zones showing deteriorating conditions.</li>
+                        <li><strong>Latin America:</strong> Accounts for 5% of cases, with marked disparities between rural and urban areas.</li>
+                    </ul>
+                    
+                    <p class="source">Source: UNICEF-WHO-World Bank Joint Child Malnutrition Estimates, 2023</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>Malnutrition Trends (2000-2023)</h2>
+                <div class="chart-container">
+                    <canvas id="trendLineChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Progress and Challenges</h3>
+                    <p>While global trends show overall improvement in reducing malnutrition, progress has been uneven and has stalled or reversed in some regions due to conflict, climate change, and the COVID-19 pandemic.</p>
+                    
+                    <div class="tags">
+                        <span class="tag tag-danger">Conflict Zones</span>
+                        <span class="tag tag-warning">Climate Impact</span>
+                        <span class="tag tag-info">COVID-19 Effect</span>
+                    </div>
+                    
+                    <p>The global rate of stunting has decreased from 33.1% in 2000 to 22.3% in 2023, showing progress. However, the absolute number of overweight children has increased by 30% in the same period, indicating an emerging double burden of malnutrition.</p>
+                    
+                    <p class="source">Source: World Health Organization Global Nutrition Report, 2023</p>
+                </div>
+            </div>
+            
+            <div class="stat-card full-width">
+                <h2>Impact of Nutrition Interventions</h2>
+                <div class="chart-container">
+                    <canvas id="interventionChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Effective Strategies</h3>
+                    <p>Evidence shows that targeted nutrition interventions can significantly reduce malnutrition rates when consistently implemented. Key strategies include:</p>
+                    
+                    <ul class="key-findings">
+                        <li><strong>Supplementation Programs:</strong> Providing essential vitamins and minerals to at-risk populations.</li>
+                        <li><strong>Community-Based Management:</strong> Training local health workers to identify and treat malnutrition cases early.</li>
+                        <li><strong>School Feeding Programs:</strong> Ensuring children receive at least one nutritious meal per day while in school.</li>
+                        <li><strong>Agricultural Support:</strong> Helping families grow diverse, nutritious foods through home gardens and improved farming techniques.</li>
+                        <li><strong>Water, Sanitation & Hygiene:</strong> Reducing infections that contribute to malnutrition through better WASH practices.</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p>Every $1 invested in nutrition interventions yields approximately $16 in economic returns through improved health outcomes and productivity.</p>
+                    </div>
+                    
+                    <p>Success stories from countries like Ethiopia, Peru, and Vietnam demonstrate that rapid progress is possible with sustained political commitment and multi-sector approaches.</p>
+                    
+                    <p class="source">Source: The Lancet Series on Maternal and Child Nutrition, 2023</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>Economic Impact of Malnutrition</h2>
+                <div class="chart-container">
+                    <canvas id="economicImpactChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Hidden Costs</h3>
+                    <p>Malnutrition imposes significant economic burdens on countries through healthcare costs, productivity losses, and reduced cognitive development.</p>
+                    
+                    <ul class="key-findings">
+                        <li><strong>GDP Loss:</strong> Countries with high malnutrition rates lose 2-3% of their GDP annually due to lost productivity.</li>
+                        <li><strong>Healthcare Costs:</strong> Treating malnutrition-related illnesses consumes up to 15% of national health budgets in affected countries.</li>
+                        <li><strong>Education Impact:</strong> Malnourished children complete 1.1 fewer years of schooling on average.</li>
+                        <li><strong>Earning Potential:</strong> Adults who were malnourished as children earn 20% less on average than those who were well-nourished.</li>
+                    </ul>
+                    
+                    <p class="source">Source: World Bank Economic Impact Assessment of Malnutrition, 2023</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>Malnutrition & Climate Change</h2>
+                <div class="chart-container">
+                    <canvas id="climateImpactChart"></canvas>
+                </div>
+                
+                <div class="stat-info">
+                    <h3>Emerging Threats</h3>
+                    <p>Climate change is intensifying food insecurity and malnutrition risks through multiple pathways:</p>
+                    
+                    <ul class="key-findings">
+                        <li><strong>Crop Yields:</strong> Declining by 2-6% per decade in vulnerable regions due to changing rainfall patterns and temperatures.</li>
+                        <li><strong>Water Scarcity:</strong> Affecting agricultural production and food preparation practices.</li>
+                        <li><strong>Extreme Weather:</strong> Destroying food stocks and disrupting supply chains.</li>
+                        <li><strong>Nutrient Content:</strong> Elevated CO2 levels reduce protein, zinc, and iron content in staple crops.</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p>Climate change could cause a 20% increase in global malnutrition by 2050 if adaptation measures are not implemented.</p>
+                    </div>
+                    
+                    <p class="source">Source: Intergovernmental Panel on Climate Change (IPCC), 2023</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js Configuration
+        Chart.defaults.font.family = "'Open Sans', sans-serif";
+        Chart.defaults.font.size = 14;
+        Chart.defaults.color = '#546e7a';
+        
+        // Main Chart Data - Child Malnutrition Categories in India
+        const malnutritionCtx = document.getElementById('malnutritionChart').getContext('2d');
+        const malnutritionChart = new Chart(malnutritionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Underweight', 'Stunting', 'Wasting', 'Severe Acute Malnutrition', 'Anaemia'],
+                datasets: [{
+                    label: 'Percentage of Children Under 5',
+                    data: [35.8, 38.4, 21.0, 7.5, 58.6],
+                    backgroundColor: ['#ff7043', '#ffa000', '#ffca28', '#e53935', '#8e24aa'],
+                    borderWidth: 0,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + '% of children';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 70,
+                        ticks: { callback: value => value + '%' },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Global Distribution Pie Chart
+        const globalPieCtx = document.getElementById('globalPieChart').getContext('2d');
+        const globalPieChart = new Chart(globalPieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['South Asia', 'Sub-Saharan Africa', 'East Asia', 'Middle East & North Africa', 'Latin America', 'Other Regions'],
+                datasets: [{
+                    data: [33, 32, 10, 8, 5, 12],
+                    backgroundColor: ['#2e7d32', '#f57c00', '#1976d2', '#9c27b0', '#e53935', '#607d8b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 20, boxWidth: 15, font: { size: 12 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => `${context.label}: ${context.raw}% of global cases`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Trend Line Chart
+        const trendLineCtx = document.getElementById('trendLineChart').getContext('2d');
+        const trendLineChart = new Chart(trendLineCtx, {
+            type: 'line',
+            data: {
+                labels: ['2000', '2005', '2010', '2015', '2020', '2023'],
+                datasets: [
+                    {
+                        label: 'Stunting',
+                        data: [33.1, 29.6, 26.8, 24.1, 22.7, 22.3],
+                        borderColor: '#2e7d32',
+                        backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Wasting',
+                        data: [8.1, 8.0, 7.9, 7.5, 6.8, 6.7],
+                        borderColor: '#f57c00',
+                        backgroundColor: 'rgba(245, 124, 0, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Overweight',
+                        data: [4.9, 5.3, 5.5, 5.6, 5.7, 5.9],
+                        borderColor: '#e53935',
+                        backgroundColor: 'rgba(229, 57, 53, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'circle' }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => `${context.dataset.label}: ${context.raw}%`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Global Prevalence (%)' },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ✅ FIXED: Intervention Impact Chart
+        const interventionCtx = document.getElementById('interventionChart').getContext('2d');
+        const interventionChart = new Chart(interventionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Before Intervention', 'After 1 Year', 'After 3 Years', 'After 5 Years'],
+                datasets: [
+                    {
+                        label: 'Stunting Rate',
+                        data: [38, 32, 27, 21],
+                        backgroundColor: '#2e7d32',
+                        borderWidth: 0,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Wasting Rate',
+                        data: [15, 11, 8, 5],
+                        backgroundColor: '#f57c00',
+                        borderWidth: 0,
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Anemia Rate',
+                        data: [47, 39, 32, 24],
+                        backgroundColor: '#8e24aa',
+                        borderWidth: 0,
+                        borderRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            usePointStyle: true,
+                            pointStyle: 'rect'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Rate (%)'
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Economic Impact Chart
+        const economicImpactCtx = document.getElementById('economicImpactChart').getContext('2d');
+        const economicImpactChart = new Chart(economicImpactCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['GDP Loss', 'Healthcare Costs', 'Education Impact', 'Earning Potential'],
+                datasets: [{
+                    data: [2.5, 15, 1.1, 20],
+                    backgroundColor: ['#2e7d32', '#f57c00', '#1976d2', '#e53935'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 20,
+                            boxWidth: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => `${context.label}: ${context.raw}% GDP impact`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Climate Impact Chart
+        const climateImpactCtx = document.getElementById('climateImpactChart').getContext('2d');
+        const climateImpactChart = new Chart(climateImpactCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Crop Yields', 'Water Scarcity', 'Extreme Weather', 'Nutrient Content'],
+                datasets: [{
+                    label: 'Impact Severity',
+                    data: [6, 7, 8, 5],
+                    backgroundColor: 'rgba(229, 57, 53, 0.2)',
+                    borderColor: '#e53935',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#e53935'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => `${context.label}: ${context.raw} (severity)`
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: { stepSize: 1 },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    }
+                }
+            }
+        });
+    </script>
+</html>
