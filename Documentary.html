@@ -206,30 +206,22 @@
     </header>
 
     <!-- 🎥 Featured Documentary Section -->
-   <section class="video-documentary-section">
-    <div class="container">
-        <h2 class="section-title">Watch Our <span>Documentary</span></h2>
-        <p class="section-description">Our documentary explores the global impact of malnutrition worldwide.</p>
-
-        <div class="video-container">
-            <!-- Embedded Video -->
-            <video id="documentaryVideo" width="100%" height="450" controls poster="/api/placeholder/800/450">
-                <source src="Malnutrition Awareness Documentary.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-
-            <!-- Full-Screen Button -->
-            <button class="full-screen-button" onclick="goFullScreen()">Full Screen</button>
-
-            <!-- Video Details -->
-            <div class="video-details">
-                <h3 class="video-title">The Hidden Crisis: Fighting Child Malnutrition</h3>
-                <div class="video-length">5:35</div>
-            </div>
-        </div>
+<div class="video-container">
+    <div class="video-wrapper">
+        <video id="documentaryVideo" width="100%" height="450" controls poster="/api/placeholder/800/450">
+            <source src="Malnutrition Awareness Documentary.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <!-- Full-Screen Button -->
+        <button class="full-screen-button" onclick="goFullScreen()">Full Screen</button>
     </div>
-</section>
 
+    <!-- Video Details -->
+    <div class="video-details">
+        <h3 class="video-title">The Hidden Crisis: Fighting Child Malnutrition</h3>
+        <div class="video-length">5:35</div>
+    </div>
+</div>
 <script>
     function goFullScreen() {
         const video = document.getElementById('documentaryVideo');
@@ -243,25 +235,6 @@
     }
 </script>
 
-<style>
-    .full-screen-button {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        padding: 10px 20px;
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
 
-    .full-screen-button:hover {
-        background-color: #3e8e41;
-        transform: scale(1.1);
-    }
-</style>
 </body>
 </html>
