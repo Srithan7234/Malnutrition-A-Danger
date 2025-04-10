@@ -1,232 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nutrition For All - Featured Documentary</title>
-    <style>
-        :root {
-            --primary-color: #4CAF50;
-            --accent-color: #FF8C00;
-            --dark-bg: #333;
-            --light-text: #fff;
-            --light-bg: #f5f5f5;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            background-color: var(--light-bg);
-            padding: 15px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        .nav-links li a {
-            text-decoration: none;
-            color: var(--dark-bg);
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links li a:hover {
-            color: var(--accent-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .video-documentary-section {
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .section-title span {
-            color: var(--accent-color);
-        }
-
-        .section-description {
-            max-width: 800px;
-            margin: 0 auto 40px;
-            font-size: 18px;
-            line-height: 1.6;
-            color: #ddd;
-        }
-
-        .video-container {
-            max-width: 800px;
-            margin: 0 auto 30px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .video-placeholder {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        .video-placeholder img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 140, 0, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .play-button:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background-color: rgba(255, 140, 0, 1);
-        }
-
-        .play-button::after {
-            content: "";
-            width: 0;
-            height: 0;
-            border-top: 15px solid transparent;
-            border-left: 25px solid white;
-            border-bottom: 15px solid transparent;
-            margin-left: 5px;
-        }
-
-        .video-details {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: left;
-        }
-
-        .video-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .video-length {
-            font-size: 14px;
-            opacity: 0.8;
-            display: flex;
-            align-items: center;
-        }
-
-        .video-length::before {
-            content: "";
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'/%3E%3C/svg%3E");
-            background-size: contain;
-            margin-right: 5px;
-        }
-
-        .cta-buttons {
-            margin-top: 30px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .cta-button:hover {
-            background: #3e8e41;
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 🚀 Navbar -->
-    <header class="navbar">
-        <nav class="container">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="stats.html">Stats</a></li>
-                <li><a href="Documentary.html">Documentary</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- 🎥 Featured Documentary Section -->
-   <section class="video-documentary-section">
-    <div class="container">
-        <h2 class="section-title">Watch Our <span>Documentary</span></h2>
-        <p class="section-description">Our documentary explores the global impact of malnutrition worldwide.</p>
-
-        <div class="video-container">
-            <!-- Embedded Video -->
-            <video id="documentaryVideo" width="100%" height="450" controls poster="/api/placeholder/800/450">
-                <source src="Malnutrition Awareness Documentary.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-
-          <!-- Video Details -->
-            <div class="video-details">
-                <h3 class="video-title">The Hidden Crisis: Fighting Child Malnutrition</h3>
-                <div class="video-length">5:35</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-</body>
-</html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Nutrition For All - Featured Documentary</title>
+     <style>
+         :root {
+             --primary-color: #4CAF50;
+             --accent-color: #FF8C00;
+             --dark-bg: #333;
+             --light-text: #fff;
+             --light-bg: #f5f5f5;
+         }
+ 
+         body {
+             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+             margin: 0;
+             padding: 0;
+             color: #333;
+         }
+ 
+         /* Navbar Styles */
+         .navbar {
+             background-color: var(--light-bg);
+             padding: 15px 0;
+             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+             position: sticky;
+             top: 0;
+             z-index: 1000;
+         }
+ 
+         .nav-links {
+             list-style: none;
+             display: flex;
+             gap: 30px;
+             margin: 0;
+             padding: 0;
+             justify-content: flex-start;
+             align-items: center;
+         }
+ 
+         .nav-links li a {
+             text-decoration: none;
+             color: var(--dark-bg);
+             font-weight: 600;
+             transition: color 0.3s ease;
+         }
+ 
+         .nav-links li a:hover {
+             color: var(--accent-color);
+         }
+ 
+         .container {
+             max-width: 1200px;
+             margin: 0 auto;
+             padding: 0 20px;
+         }
+ 
+         .video-documentary-section {
+             background-color: var(--dark-bg);
+             color: var(--light-text);
+             padding: 80px 0;
+             text-align: center;
+         }
+ 
+         .section-title {
+             font-size: 2.5rem;
+             margin-bottom: 20px;
+         }
+ 
+         .section-title span {
+             color: var(--accent-color);
+         }
+ 
+         .section-description {
+             max-width: 800px;
+             margin: 0 auto 40px;
+             font-size: 18px;
+             line-height: 1.6;
+             color: #ddd;
+         }
+ 
+         .video-container {
+             max-width: 800px;
+             margin: 0 auto 30px;
+             border-radius: 10px;
+             overflow: hidden;
+             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+             position: relative;
+         }
+ 
+         .video-placeholder {
+             position: relative;
+             padding-bottom: 56.25%;
+             height: 0;
+             overflow: hidden;
+             background-color: #000;
+         }
+ 
+         .video-placeholder img {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+         }
+ 
+         .play-button {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             width: 80px;
+             height: 80px;
+             background-color: rgba(255, 140, 0, 0.8);
+             border-radius: 50%;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             cursor: pointer;
+             transition: all 0.3s;
+         }
+ 
+         .play-button:hover {
+             transform: translate(-50%, -50%) scale(1.1);
+             background-color: rgba(255, 140, 0, 1);
+         }
+ 
+         .play-button::after {
+             content: "";
+             width: 0;
+             height: 0;
+             border-top: 15px solid transparent;
+             border-left: 25px solid white;
+             border-bottom: 15px solid transparent;
+             margin-left: 5px;
+         }
+ 
+         .video-details {
+             background-color: rgba(0, 0, 0, 0.7);
+             padding: 15px;
+             position: absolute;
+             bottom: 0;
+             left: 0;
+             right: 0;
+             text-align: left;
+         }
+ 
+         .video-title {
+             font-size: 18px;
+             font-weight: 600;
+             margin-bottom: 5px;
+         }
+ 
+         .video-length {
+             font-size: 14px;
+             opacity: 0.8;
+             display: flex;
+             align-items: center;
+         }
+ 
+         .video-length::before {
+             content: "";
+             display: inline-block;
+             width: 14px;
+             height: 14px;
+             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'/%3E%3C/svg%3E");
+             background-size: contain;
+             margin-right: 5px;
+         }
+ 
+         .cta-buttons {
+             margin-top: 30px;
+         }
+ 
+         .cta-button {
+             display: inline-block;
+             background: var(--primary-color);
+             color: white;
+             padding: 12px 30px;
+             border-radius: 30px;
+             text-decoration: none;
+             font-weight: 600;
+             transition: all 0.3s;
+         }
+ 
+         .cta-button:hover {
+             background: #3e8e41;
+             transform: scale(1.05);
+         }
+     </style>
+ </head>
+ <body>
+ 
+     <!-- 🚀 Navbar -->
+     <header class="navbar">
+         <nav class="container">
+             <ul class="nav-links">
+                 <li><a href="index.html">Home</a></li>
+                 <li><a href="stats.html">Stats</a></li>
+                 <li><a href="Documentary.html">Documentary</a></li>
+             </ul>
+         </nav>
+     </header>
+ 
+     <!-- 🎥 Featured Documentary Section -->
+     <section class="video-documentary-section">
+         <div class="container">
+             <h2 class="section-title">Watch Our <span>Documentary</span></h2>
+             <p class="section-description">Our award-winning documentary explores the global impact of malnutrition and showcases innovative solutions making a difference in communities worldwide.</p>
+             <p class="section-description">Our documentary explores the global impact of malnutrition worldwide.</p>
+ 
+             <div class="video-container">
+                 <div class="video-placeholder">
+                     <img src="/api/placeholder/800/450" alt="The Hidden Crisis: Global Malnutrition Documentary">
+                     <div class="play-button"></div>
+                     <div class="video-container">
+    <div class="video-wrapper">
+        <video id="documentaryVideo" width="100%" height="450" controls poster="/api/placeholder/800/450">
+            <source src="Malnutrition Awareness Documentary.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+                     <div class="video-details">
+                         <h3 class="video-title">The Hidden Crisis: Fighting Child Malnutrition</h3>
+                         <div class="video-length">45:28</div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </section>
+ 
+ </body>
+ </html>
